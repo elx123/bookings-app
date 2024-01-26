@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"errors"
 	"fmt"
-	"github.com/justinas/nosurf"
-	"github.com/tsawler/bookings-app/internal/config"
-	"github.com/tsawler/bookings-app/internal/models"
 	"html/template"
 	"net/http"
 	"path/filepath"
+
+	"github.com/justinas/nosurf"
+	"github.com/tsawler/bookings-app/internal/config"
+	"github.com/tsawler/bookings-app/internal/models"
 )
 
 var functions = template.FuncMap{}
@@ -27,7 +28,7 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 	td.Flash = app.Session.PopString(r.Context(), "flash")
 	td.Warning = app.Session.PopString(r.Context(), "warning")
 	td.Error = app.Session.PopString(r.Context(), "error")
-	td.CSRFToken = nosurf.Token(r)
+	td.CSRFToken = nosurf.Token(r) // 这里Token有个细节,在第一个mid 之中,我们设置了cookie,同时也设置了ctx 作为form的CSRFToken,所以这里可以从ctx 中取出token
 	return td
 }
 
